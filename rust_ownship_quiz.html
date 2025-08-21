@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust 所有权和借用快问快答</title>
+    <link rel="stylesheet" href="quiz-styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🦀 Rust 所有权和借用快问快答</h1>
+            <p>测试你对Rust所有权和借用机制的理解程度</p>
+        </div>
+
+        <div class="quiz-info">
+            <div class="info-item">
+                <div class="number">10</div>
+                <div class="label">题目数量</div>
+            </div>
+            <div class="info-item">
+                <div class="number">25</div>
+                <div class="label">预计时间(分钟)</div>
+            </div>
+            <div class="info-item">
+                <div class="number">⭐⭐⭐⭐⭐</div>
+                <div class="label">难度等级</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="controls">
+                <button class="btn" onclick="startQuiz()">开始答题</button>
+                <button class="btn" onclick="showAllAnswers()">显示所有答案</button>
+                <button class="btn" onclick="resetQuiz()">重新开始</button>
+            </div>
+
+            <div class="score" id="score"></div>
+
+        <!-- 题目1 -->
+        <div class="question" id="q1">
+            <div class="question-number">第 1 题</div>
+            <div class="question-text">在Rust中，一个值在同一时间只能有一个所有者。</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(1, 'A')">
+                    A. 正确
+                </div>
+                <div class="option" onclick="selectOption(1, 'B')">
+                    B. 错误
+                </div>
+            </div>
+            <div class="explanation" id="a1">
+                <h4>答案：A. 正确</h4>
+                <p><strong>解析：</strong> 这是Rust所有权系统的核心规则之一。每个值在任何时候都只能有一个所有者，当所有者离开作用域时，值会被自动释放。</p>
+            </div>
+        </div>
+
+        <!-- 题目2 -->
+        <div class="question" id="q2">
+            <div class="question-number">第 2 题</div>
+            <div class="question-text">以下哪种情况会发生所有权转移？</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(2, 'A')">
+                    A. 将变量传递给函数
+                </div>
+                <div class="option" onclick="selectOption(2, 'B')">
+                    B. 将变量赋值给另一个变量
+                </div>
+                <div class="option" onclick="selectOption(2, 'C')">
+                    C. 从函数返回变量
+                </div>
+                <div class="option" onclick="selectOption(2, 'D')">
+                    D. 以上都是
+                </div>
+            </div>
+            <div class="explanation" id="a2">
+                <h4>答案：D. 以上都是</h4>
+                <p><strong>解析：</strong> 在Rust中，将变量传递给函数、赋值给另一个变量、或从函数返回时，如果类型没有实现Copy trait，都会发生所有权转移（move）。</p>
+            </div>
+        </div>
+
+        <!-- 题目3 -->
+        <div class="question" id="q3">
+            <div class="question-number">第 3 题</div>
+            <div class="question-text">可变引用和不可变引用可以同时存在。</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(3, 'A')">
+                    A. 正确
+                </div>
+                <div class="option" onclick="selectOption(3, 'B')">
+                    B. 错误
+                </div>
+            </div>
+            <div class="explanation" id="a3">
+                <h4>答案：B. 错误</h4>
+                <p><strong>解析：</strong> 这违反了Rust的借用规则。在同一时间，要么只能有一个可变引用，要么只能有多个不可变引用，但不能同时存在可变引用和不可变引用。</p>
+            </div>
+        </div>
+
+        <!-- 题目4 -->
+        <div class="question" id="q4">
+            <div class="question-number">第 4 题</div>
+            <div class="question-text">以下代码会编译成功吗？</div>
+            <div class="code-block">
+let s1 = String::from("hello");
+let s2 = s1;
+println!("{}", s1);
+            </div>
+            <div class="options">
+                <div class="option" onclick="selectOption(4, 'A')">
+                    A. 会编译成功
+                </div>
+                <div class="option" onclick="selectOption(4, 'B')">
+                    B. 不会编译成功
+                </div>
+            </div>
+            <div class="explanation" id="a4">
+                <h4>答案：B. 不会编译成功</h4>
+                <p><strong>解析：</strong> 当s1赋值给s2时，所有权发生了转移，s1不再有效。尝试使用s1会导致编译错误："borrow of moved value"。</p>
+            </div>
+        </div>
+
+        <!-- 题目5 -->
+        <div class="question" id="q5">
+            <div class="question-number">第 5 题</div>
+            <div class="question-text">解释什么是"悬垂引用"(dangling reference)，Rust如何防止它？</div>
+            <textarea class="textarea" placeholder="请在此输入你的答案..."></textarea>
+            <div class="explanation" id="a5">
+                <h4>参考答案：</h4>
+                <p><strong>悬垂引用</strong>是指引用指向的内存已经被释放或无效的情况。Rust通过以下方式防止悬垂引用：</p>
+                <ul>
+                    <li>借用检查器确保引用的生命周期不会超过被引用值的生命周期</li>
+                    <li>编译时检查所有引用的有效性</li>
+                    <li>强制要求引用在其指向的值被销毁之前失效</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 题目6 -->
+        <div class="question" id="q6">
+            <div class="question-number">第 6 题</div>
+            <div class="question-text">在同一作用域中，最多可以有多少个可变引用指向同一个值？</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(6, 'A')">
+                    A. 0个
+                </div>
+                <div class="option" onclick="selectOption(6, 'B')">
+                    B. 1个
+                </div>
+                <div class="option" onclick="selectOption(6, 'C')">
+                    C. 2个
+                </div>
+                <div class="option" onclick="selectOption(6, 'D')">
+                    D. 无限个
+                </div>
+            </div>
+            <div class="explanation" id="a6">
+                <h4>答案：B. 1个</h4>
+                <p><strong>解析：</strong> 在同一作用域中，最多只能有一个可变引用指向同一个值。这防止了数据竞争和并发修改问题。</p>
+            </div>
+        </div>
+
+        <!-- 题目7 -->
+        <div class="question" id="q7">
+            <div class="question-number">第 7 题</div>
+            <div class="question-text">Copy trait的类型在赋值时会发生所有权转移。</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(7, 'A')">
+                    A. 正确
+                </div>
+                <div class="option" onclick="selectOption(7, 'B')">
+                    B. 错误
+                </div>
+            </div>
+            <div class="explanation" id="a7">
+                <h4>答案：B. 错误</h4>
+                <p><strong>解析：</strong> 实现了Copy trait的类型（如整数、布尔值等）在赋值时会进行复制而不是移动，原变量仍然有效。</p>
+            </div>
+        </div>
+
+        <!-- 题目8 -->
+        <div class="question" id="q8">
+            <div class="question-number">第 8 题</div>
+            <div class="question-text">以下哪个不是引用规则？</div>
+            <div class="options">
+                <div class="option" onclick="selectOption(8, 'A')">
+                    A. 在任意给定时间，要么只能有一个可变引用，要么只能有多个不可变引用
+                </div>
+                <div class="option" onclick="selectOption(8, 'B')">
+                    B. 引用必须总是有效的
+                </div>
+                <div class="option" onclick="selectOption(8, 'C')">
+                    C. 可变引用可以转换为不可变引用
+                </div>
+                <div class="option" onclick="selectOption(8, 'D')">
+                    D. 不可变引用可以转换为可变引用
+                </div>
+            </div>
+            <div class="explanation" id="a8">
+                <h4>答案：D. 不可变引用可以转换为可变引用</h4>
+                <p><strong>解析：</strong> 不可变引用不能转换为可变引用，这会违反借用规则。但可变引用可以被当作不可变引用使用（强制解引用）。</p>
+            </div>
+        </div>
+
+        <!-- 题目9 -->
+        <div class="question" id="q9">
+            <div class="question-number">第 9 题</div>
+            <div class="question-text">什么是生命周期？为什么Rust需要生命周期注解？</div>
+            <textarea class="textarea" placeholder="请在此输入你的答案..."></textarea>
+            <div class="explanation" id="a9">
+                <h4>参考答案：</h4>
+                <p><strong>生命周期</strong>是引用有效的作用域范围。Rust需要生命周期注解来：</p>
+                <ul>
+                    <li>确保引用在其指向的值被销毁之前保持有效</li>
+                    <li>防止悬垂引用</li>
+                    <li>在编译时验证内存安全</li>
+                    <li>帮助编译器理解不同引用之间的关系，特别是在函数参数和返回值中</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 题目10 -->
+        <div class="question" id="q10">
+            <div class="question-number">第 10 题</div>
+            <div class="question-text">以下代码中，哪个变量拥有字符串的所有权？</div>
+            <div class="code-block">
+let s1 = String::from("hello");
+let s2 = &s1;
+let s3 = s1.clone();
+            </div>
+            <div class="options">
+                <div class="option" onclick="selectOption(10, 'A')">
+                    A. 只有s1
+                </div>
+                <div class="option" onclick="selectOption(10, 'B')">
+                    B. s1和s3
+                </div>
+                <div class="option" onclick="selectOption(10, 'C')">
+                    C. s1、s2和s3
+                </div>
+                <div class="option" onclick="selectOption(10, 'D')">
+                    D. 只有s3
+                </div>
+            </div>
+            <div class="explanation" id="a10">
+                <h4>答案：B. s1和s3</h4>
+                <p><strong>解析：</strong></p>
+                <ul>
+                    <li>s1是原始字符串的所有者</li>
+                    <li>s2只是s1的引用，不拥有所有权</li>
+                    <li>s3通过clone()创建了字符串的深拷贝，拥有新字符串的所有权</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button class="btn" onclick="submitQuiz()">提交答案</button>
+        </div>
+
+        <div class="final-results" id="final-results">
+            <div class="result-icon">🎉</div>
+            <div class="result-text">测验完成！</div>
+            <div class="result-score" id="final-score">0/10</div>
+            <button class="btn" onclick="resetQuiz()">重新开始</button>
+        </div>
+
+        <div class="controls">
+            <button class="btn" onclick="checkAnswers()">检查答案</button>
+            <button class="btn btn-secondary" onclick="showAllAnswers()">显示所有答案</button>
+        </div>
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'A', q2: 'D', q3: 'B', q4: 'B', q6: 'B', q7: 'B', q8: 'D', q10: 'B'
+        };
+
+        function startQuiz() {
+            resetQuiz();
+            document.querySelector('.controls').style.display = 'none';
+            document.getElementById('score').style.display = 'none';
+        }
+
+        function resetQuiz() {
+            // 清除所有选择
+            const radios = document.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => radio.checked = false);
+            
+            // 清除文本框
+            const textareas = document.querySelectorAll('.textarea');
+            textareas.forEach(textarea => textarea.value = '');
+            
+            // 隐藏所有答案
+            const answers = document.querySelectorAll('.answer');
+            answers.forEach(answer => answer.classList.remove('show'));
+            
+            // 隐藏分数
+            document.getElementById('score').style.display = 'none';
+            
+            // 显示控制按钮
+            document.querySelector('.controls').style.display = 'block';
+        }
+
+        function checkAnswers() {
+            let score = 0;
+            let total = Object.keys(correctAnswers).length;
+            
+            for (let questionId in correctAnswers) {
+                const selectedOption = document.querySelector(`input[name="${questionId}"]:checked`);
+                if (selectedOption && selectedOption.value === correctAnswers[questionId]) {
+                    score++;
+                }
+            }
+            
+            const percentage = Math.round((score / total) * 100);
+            const scoreElement = document.getElementById('score');
+            scoreElement.innerHTML = `
+                <h3>你的得分：${score}/${total} (${percentage}%)</h3>
+                <p>${getScoreMessage(percentage)}</p>
+            `;
+            scoreElement.style.display = 'block';
+            
+            // 显示答案
+            showAllAnswers();
+        }
+
+        function getScoreMessage(percentage) {
+            if (percentage >= 90) return '🎉 优秀！你对Rust所有权和借用的理解非常深入！';
+            if (percentage >= 70) return '👍 良好！继续加油，你已经掌握了大部分概念！';
+            if (percentage >= 50) return '📚 还需努力！建议多练习和阅读相关文档。';
+            return '💪 加油！建议重新学习Rust所有权和借用的基础概念。';
+        }
+
+        function showAllAnswers() {
+            const answers = document.querySelectorAll('.answer');
+            answers.forEach(answer => answer.classList.add('show'));
+        }
+
+        // 添加选项点击效果
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.checked = true;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

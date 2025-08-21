@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust 类型系统快问快答</title>
+    <link rel="stylesheet" href="quiz-styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🦀 Rust 类型系统快问快答</h1>
+            <p>测试你对 Rust 类型系统的理解</p>
+        </div>
+        
+        <div class="quiz-info">
+            <div class="info-item">
+                <div class="number">10</div>
+                <div class="label">题目数量</div>
+            </div>
+            <div class="info-item">
+                <div class="number">15</div>
+                <div class="label">预计时间(分钟)</div>
+            </div>
+            <div class="info-item">
+                <div class="number">⭐⭐</div>
+                <div class="label">难度等级</div>
+            </div>
+        </div>
+        
+        <div class="content">
+        
+        <div class="controls">
+            <button class="btn" onclick="startQuiz()">开始答题</button>
+            <button class="btn btn-secondary" onclick="showAllAnswers()">显示所有答案</button>
+            <button class="btn btn-secondary" onclick="resetQuiz()">重新开始</button>
+        </div>
+
+        <div class="score" id="score"></div>
+
+        <!-- 题目1 -->
+        <div class="question" id="q1">
+            <div class="question-number">题 1 - 判断题</div>
+            <div class="question-text">Rust中的泛型在编译时会进行单态化(monomorphization)，生成具体类型的代码。</div>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" name="q1" value="A" id="q1a">
+                    <label for="q1a">A. 正确</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q1" value="B" id="q1b">
+                    <label for="q1b">B. 错误</label>
+                </div>
+            </div>
+            <div class="answer" id="a1">
+                <h4>答案：A. 正确</h4>
+                <p><strong>解析：</strong> Rust在编译时会对泛型进行单态化，为每个具体使用的类型生成专门的代码副本。这样既保证了类型安全，又避免了运行时的性能开销。</p>
+            </div>
+        </div>
+
+        <!-- 题目2 -->
+        <div class="question" id="q2">
+            <div class="question-number">题 2 - 选择题</div>
+            <div class="question-text">以下哪个trait是Rust中用于定义类型可以被复制的？</div>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" name="q2" value="A" id="q2a">
+                    <label for="q2a">A. Clone</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q2" value="B" id="q2b">
+                    <label for="q2b">B. Copy</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q2" value="C" id="q2c">
+                    <label for="q2c">C. Drop</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q2" value="D" id="q2d">
+                    <label for="q2d">D. Send</label>
+                </div>
+            </div>
+            <div class="answer" id="a2">
+                <h4>答案：B. Copy</h4>
+                <p><strong>解析：</strong> Copy trait表示类型可以通过简单的位复制来复制，不需要特殊的复制逻辑。实现了Copy的类型在赋值时会自动复制而不是移动。Clone trait则需要显式调用clone()方法。</p>
+            </div>
+        </div>
+
+        <!-- 题目3 -->
+        <div class="question" id="q3">
+            <div class="question-number">题 3 - 选择题</div>
+            <div class="question-text">以下代码中，哪个生命周期注解是正确的？</div>
+            <div class="code-block">
+fn longest(x: &str, y: &str) -> &str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
+}
+            </div>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" name="q3" value="A" id="q3a">
+                    <label for="q3a">A. fn longest&lt;'a&gt;(x: &'a str, y: &'a str) -&gt; &'a str</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q3" value="B" id="q3b">
+                    <label for="q3b">B. fn longest&lt;'a, 'b&gt;(x: &'a str, y: &'b str) -&gt; &'a str</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q3" value="C" id="q3c">
+                    <label for="q3c">C. fn longest(x: &'static str, y: &'static str) -&gt; &'static str</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q3" value="D" id="q3d">
+                    <label for="q3d">D. 不需要生命周期注解</label>
+                </div>
+            </div>
+            <div class="answer" id="a3">
+                <h4>答案：A. fn longest&lt;'a&gt;(x: &'a str, y: &'a str) -&gt; &'a str</h4>
+                <p><strong>解析：</strong> 由于函数返回的引用可能来自x或y中的任意一个，编译器无法确定返回值的生命周期。我们需要用同一个生命周期参数'a来标注所有参数和返回值，表示返回值的生命周期不会超过两个输入参数中较短的那个。</p>
+            </div>
+        </div>
+
+        <!-- 题目4 -->
+        <div class="question" id="q4">
+            <div class="question-number">题 4 - 判断题</div>
+            <div class="question-text">Rust中的trait对象(trait object)支持静态分发。</div>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" name="q4" value="A" id="q4a">
+                    <label for="q4a">A. 正确</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q4" value="B" id="q4b">
+                    <label for="q4b">B. 错误</label>
+                </div>
+            </div>
+            <div class="answer" id="a4">
+                <h4>答案：B. 错误</h4>
+                <p><strong>解析：</strong> trait对象使用动态分发，通过虚函数表(vtable)在运行时确定调用哪个具体实现。静态分发是通过泛型实现的，在编译时就确定了具体的类型和方法调用。</p>
+            </div>
+        </div>
+
+        <!-- 题目5 -->
+        <div class="question" id="q5">
+            <div class="question-number">题 5 - 简答题</div>
+            <div class="question-text">解释Rust中<span class="highlight">关联类型</span>(associated types)和<span class="highlight">泛型参数</span>的区别，并举例说明。</div>
+            <textarea class="textarea" placeholder="请在此输入你的答案..."></textarea>
+            <div class="answer" id="a5">
+                <h4>参考答案：</h4>
+                <p><strong>关联类型</strong>是trait中定义的类型，每个实现该trait的类型只能有一个关联类型的具体实现。</p>
+                <p><strong>泛型参数</strong>允许一个类型对同一个trait有多个不同的实现。</p>
+                <div class="code-block">
+// 关联类型示例
+trait Iterator {
+    type Item;  // 关联类型
+    fn next(&mut self) -> Option&lt;Self::Item&gt;;
+}
+
+// 泛型参数示例
+trait From&lt;T&gt; {  // 泛型参数
+    fn from(value: T) -> Self;
+}
+                </div>
+                <p>关联类型更适合一对一的关系，泛型参数适合一对多的关系。</p>
+            </div>
+        </div>
+
+        <!-- 题目6 -->
+        <div class="question" id="q6">
+            <div class="question-number">题 6 - 选择题</div>
+            <div class="question-text">以下哪个不是Rust的自动trait？</div>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" name="q6" value="A" id="q6a">
+                    <label for="q6a">A. Send</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q6" value="B" id="q6b">
+                    <label for="q6b">B. Sync</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q6" value="C" id="q6c">
+                    <label for="q6c">C. Clone</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q6" value="D" id="q6d">
+                    <label for="q6d">D. Unpin</label>
+                </div>
+            </div>
+            <div class="answer" id="a6">
+                <h4>答案：C. Clone</h4>
+                <p><strong>解析：</strong> Send、Sync和Unpin都是自动trait，编译器会根据类型的组成自动实现。Clone需要手动实现或使用#[derive(Clone)]来自动生成实现。</p>
+            </div>
+        </div>
+
+        <!-- 题目7 -->
+        <div class="question" id="q7">
+            <div class="question-number">题 7 - 选择题</div>
+            <div class="question-text">以下代码会发生什么？</div>
+            <div class="code-block">
+let x: i32 = "42".parse().unwrap();
+let y = "hello".parse::&lt;i32&gt;();
+            </div>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" name="q7" value="A" id="q7a">
+                    <label for="q7a">A. 编译错误</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q7b" value="B" id="q7b">
+                    <label for="q7b">B. x = 42, y会panic</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q7" value="C" id="q7c">
+                    <label for="q7c">C. x = 42, y = Err(...)</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q7" value="D" id="q7d">
+                    <label for="q7d">D. 都会panic</label>
+                </div>
+            </div>
+            <div class="answer" id="a7">
+                <h4>答案：C. x = 42, y = Err(...)</h4>
+                <p><strong>解析：</strong> 第一行通过类型推断和unwrap()成功解析"42"为i32。第二行使用turbofish语法指定类型，但"hello"无法解析为i32，所以parse()返回Err，但没有unwrap()所以不会panic。</p>
+            </div>
+        </div>
+
+        <!-- 题目8 -->
+        <div class="question" id="q8">
+            <div class="question-number">题 8 - 判断题</div>
+            <div class="question-text">在Rust中，所有实现了Copy trait的类型都必须同时实现Clone trait。</div>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" name="q8" value="A" id="q8a">
+                    <label for="q8a">A. 正确</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q8" value="B" id="q8b">
+                    <label for="q8b">B. 错误</label>
+                </div>
+            </div>
+            <div class="answer" id="a8">
+                <h4>答案：A. 正确</h4>
+                <p><strong>解析：</strong> Copy trait是Clone trait的子trait，即Copy: Clone。这意味着任何实现Copy的类型都必须先实现Clone。这是因为Copy是Clone的一个特殊情况，表示可以通过简单的位复制来实现克隆。</p>
+            </div>
+        </div>
+
+        <!-- 题目9 -->
+        <div class="question" id="q9">
+            <div class="question-number">题 9 - 简答题</div>
+            <div class="question-text">什么是<span class="highlight">Higher-Ranked Trait Bounds</span> (HRTB)？请举例说明其用途。</div>
+            <textarea class="textarea" placeholder="请在此输入你的答案..."></textarea>
+            <div class="answer" id="a9">
+                <h4>参考答案：</h4>
+                <p><strong>Higher-Ranked Trait Bounds (HRTB)</strong>允许我们对所有可能的生命周期参数表达约束，使用<code>for&lt;'a&gt;</code>语法。</p>
+                <div class="code-block">
+// HRTB示例
+fn call_with_ref&lt;F&gt;(f: F) 
+where 
+    F: for&lt;'a&gt; Fn(&'a str) -> &'a str
+{
+    let s = String::from("hello");
+    let result = f(&s);
+    println!("{}", result);
+}
+                </div>
+                <p>HRTB主要用于：</p>
+                <ul>
+                    <li>闭包和函数指针的类型约束</li>
+                    <li>处理任意生命周期的引用</li>
+                    <li>实现更灵活的API设计</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 题目10 -->
+        <div class="question" id="q10">
+            <div class="question-number">题 10 - 选择题</div>
+            <div class="question-text">以下关于Rust类型推断的说法，哪个是错误的？</div>
+            <div class="options">
+                <div class="option">
+                    <input type="radio" name="q10" value="A" id="q10a">
+                    <label for="q10a">A. Rust使用Hindley-Milner类型推断算法</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q10" value="B" id="q10b">
+                    <label for="q10b">B. 类型推断是双向的，可以从使用上下文推断类型</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q10" value="C" id="q10c">
+                    <label for="q10c">C. 所有情况下都可以省略类型注解</label>
+                </div>
+                <div class="option">
+                    <input type="radio" name="q10" value="D" id="q10d">
+                    <label for="q10d">D. 泛型函数的类型参数可以通过参数推断</label>
+                </div>
+            </div>
+            <div class="answer" id="a10">
+                <h4>答案：C. 所有情况下都可以省略类型注解</h4>
+                <p><strong>解析：</strong></p>
+                <ul>
+                    <li>A正确：Rust确实使用了基于Hindley-Milner的类型推断</li>
+                    <li>B正确：Rust的类型推断是双向的</li>
+                    <li>C错误：某些情况下必须提供类型注解，如歧义情况、函数参数、结构体字段等</li>
+                    <li>D正确：泛型函数的类型参数通常可以从调用时的参数推断</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button class="btn" onclick="submitQuiz()">提交答案</button>
+        </div>
+        
+        <div class="final-results" id="finalResults">
+            <div class="result-icon">🎉</div>
+            <div class="result-text">恭喜完成测验！</div>
+            <div class="result-score" id="finalScore">0/10</div>
+            <button class="btn" onclick="restartQuiz()">重新开始</button>
+        </div>
+        
+        </div>
+    </div>
+
+    <script>
+        const correctAnswers = {
+            q1: 'A', q2: 'B', q3: 'A', q4: 'B', q6: 'C', q7: 'C', q8: 'A', q10: 'C'
+        };
+
+        function startQuiz() {
+            resetQuiz();
+            document.querySelector('.controls').style.display = 'none';
+            document.getElementById('score').style.display = 'none';
+        }
+
+        function resetQuiz() {
+            // 清除所有选择
+            const radios = document.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => radio.checked = false);
+            
+            // 清除文本框
+            const textareas = document.querySelectorAll('.textarea');
+            textareas.forEach(textarea => textarea.value = '');
+            
+            // 隐藏所有答案
+            const answers = document.querySelectorAll('.answer');
+            answers.forEach(answer => answer.classList.remove('show'));
+            
+            // 隐藏分数
+            document.getElementById('score').style.display = 'none';
+            
+            // 显示控制按钮
+            document.querySelector('.controls').style.display = 'block';
+        }
+
+        function checkAnswers() {
+            let score = 0;
+            let total = Object.keys(correctAnswers).length;
+            
+            for (let questionId in correctAnswers) {
+                const selectedOption = document.querySelector(`input[name="${questionId}"]:checked`);
+                if (selectedOption && selectedOption.value === correctAnswers[questionId]) {
+                    score++;
+                }
+            }
+            
+            const percentage = Math.round((score / total) * 100);
+            const scoreElement = document.getElementById('score');
+            scoreElement.innerHTML = `
+                <h3>你的得分：${score}/${total} (${percentage}%)</h3>
+                <p>${getScoreMessage(percentage)}</p>
+            `;
+            scoreElement.style.display = 'block';
+            
+            // 显示答案
+            showAllAnswers();
+        }
+
+        function getScoreMessage(percentage) {
+            if (percentage >= 90) return '🎉 优秀！你对Rust类型系统的理解非常深入！';
+            if (percentage >= 70) return '👍 良好！继续加油，你已经掌握了大部分概念！';
+            if (percentage >= 50) return '📚 还需努力！建议多练习和阅读相关文档。';
+            return '💪 加油！建议重新学习Rust类型系统的基础概念。';
+        }
+
+        function showAllAnswers() {
+            const answers = document.querySelectorAll('.answer');
+            answers.forEach(answer => answer.classList.add('show'));
+        }
+        // 添加选项点击效果
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const radio = this.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.checked = true;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
