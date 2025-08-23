@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust 引用与引用安全快问快答</title>
+    <link rel="stylesheet" href="quiz-styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🦀 Rust 引用与引用安全快问快答</h1>
+            <p>测试你对 Rust 引用、借用和引用安全的理解</p>
+        </div>
+
+        <div class="quiz-info">
+            <div class="info-item">
+                <div class="number">10</div>
+                <div class="label">题目数量</div>
+            </div>
+            <div class="info-item">
+                <div class="number">20</div>
+                <div class="label">预计时间(分钟)</div>
+            </div>
+            <div class="info-item">
+                <div class="number">⭐⭐⭐</div>
+                <div class="label">难度等级</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- 题目1 -->
+            <div class="question" data-question="1">
+                <div class="question-number">第1题 (判断题)</div>
+                <div class="question-text">
+                    在Rust中，一个值可以同时有多个可变引用。
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">正确</div>
+                    <div class="option" data-answer="true">错误</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：错误</strong></p>
+                    <p>Rust的借用规则规定：在任何给定时间，要么只能有一个可变引用，要么可以有任意数量的不可变引用。</p>
+                    <p>这是为了防止数据竞争和确保内存安全。</p>
+                </div>
+            </div>
+
+            <!-- 题目2 -->
+            <div class="question" data-question="2">
+                <div class="question-number">第2题 (选择题)</div>
+                <div class="question-text">
+                    下面哪个代码片段会导致编译错误？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">let x = 5; let y = &x; let z = &x;</div>
+                    <div class="option" data-answer="true">let mut x = 5; let y = &mut x; let z = &mut x;</div>
+                    <div class="option" data-answer="false">let x = 5; let y = &x;</div>
+                    <div class="option" data-answer="false">let mut x = 5; let y = &x; let z = &x;</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：let mut x = 5; let y = &mut x; let z = &mut x;</strong></p>
+                    <p>这段代码试图创建两个可变引用，违反了Rust的借用规则。</p>
+                    <p>选项A和D创建多个不可变引用是允许的。</p>
+                    <p>选项C只创建一个不可变引用，完全合法。</p>
+                </div>
+            </div>
+
+            <!-- 题目3 -->
+            <div class="question" data-question="3">
+                <div class="question-number">第3题 (选择题)</div>
+                <div class="question-text">
+                    引用的生命周期是什么？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">引用占用的内存大小</div>
+                    <div class="option" data-answer="true">引用有效的时间范围</div>
+                    <div class="option" data-answer="false">引用指向的数据类型</div>
+                    <div class="option" data-answer="false">引用的创建时间</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：引用有效的时间范围</strong></p>
+                    <p>生命周期是引用保持有效的时间范围，从创建到最后一次使用。</p>
+                    <p>Rust编译器使用生命周期来确保引用不会指向已释放的内存。</p>
+                    <p>这是Rust内存安全的核心机制之一。</p>
+                </div>
+            </div>
+
+            <!-- 题目4 -->
+            <div class="question" data-question="4">
+                <div class="question-number">第4题 (判断题)</div>
+                <div class="question-text">
+                    引用必须总是指向有效的数据，不能为空。
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="true">正确</div>
+                    <div class="option" data-answer="false">错误</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：正确</strong></p>
+                    <p>Rust中的引用永远不能为空，这与C/C++中的指针不同。</p>
+                    <p>如果需要表示可能为空的值，应该使用Option<&T>。</p>
+                    <p>这消除了空指针解引用的风险。</p>
+                </div>
+            </div>
+
+            <!-- 题目5 -->
+            <div class="question" data-question="5">
+                <div class="question-number">第5题 (选择题)</div>
+                <div class="question-text">
+                    下面哪个代码会产生悬垂引用（dangling reference）？
+                </div>
+                <div class="code-block">A: fn get_ref() -> &i32 {
+    let x = 42;
+    &x
+}
+
+B: fn get_ref(x: &i32) -> &i32 {
+    x
+}
+
+C: let x = 42;
+let y = &x;
+
+D: let mut x = 42;
+let y = &mut x;</div>
+                <div class="options">
+                    <div class="option" data-answer="true">A</div>
+                    <div class="option" data-answer="false">B</div>
+                    <div class="option" data-answer="false">C</div>
+                    <div class="option" data-answer="false">D</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：A</strong></p>
+                    <p>选项A试图返回局部变量x的引用，但x在函数结束时会被销毁。</p>
+                    <p>这会创建悬垂引用，Rust编译器会阻止这种情况。</p>
+                    <p>其他选项都是安全的引用使用方式。</p>
+                </div>
+            </div>
+
+            <!-- 题目6 -->
+            <div class="question" data-question="6">
+                <div class="question-number">第6题 (简答题)</div>
+                <div class="question-text">
+                    Rust中获取引用的操作符是什么？解引用的操作符是什么？
+                </div>
+                <input type="text" class="text-input" placeholder="请输入答案，用逗号分隔" data-answer="&,*">
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：&, *</strong></p>
+                    <p>&操作符用于创建引用（借用），例如：let r = &x;</p>
+                    <p>*操作符用于解引用，例如：let value = *r;</p>
+                    <p>这两个操作符是Rust中处理引用的基本工具。</p>
+                </div>
+            </div>
+
+            <!-- 题目7 -->
+            <div class="question" data-question="7">
+                <div class="question-number">第7题 (选择题)</div>
+                <div class="question-text">
+                    在Rust中，什么是借用检查器（borrow checker）？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">运行时检查内存泄漏的工具</div>
+                    <div class="option" data-answer="true">编译时验证引用规则的组件</div>
+                    <div class="option" data-answer="false">调试程序的工具</div>
+                    <div class="option" data-answer="false">性能分析器</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：编译时验证引用规则的组件</strong></p>
+                    <p>借用检查器是Rust编译器的一部分，在编译时验证借用规则。</p>
+                    <p>它确保没有数据竞争、悬垂引用或其他内存安全问题。</p>
+                    <p>这使得Rust能够在不需要垃圾回收器的情况下保证内存安全。</p>
+                </div>
+            </div>
+
+            <!-- 题目8 -->
+            <div class="question" data-question="8">
+                <div class="question-number">第8题 (判断题)</div>
+                <div class="question-text">
+                    可以同时拥有可变引用和不可变引用指向同一个数据。
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">正确</div>
+                    <div class="option" data-answer="true">错误</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：错误</strong></p>
+                    <p>Rust的借用规则禁止同时存在可变引用和不可变引用。</p>
+                    <p>这防止了数据在被读取的同时被修改，避免了数据竞争。</p>
+                    <p>必须等不可变引用的生命周期结束后，才能创建可变引用。</p>
+                </div>
+            </div>
+
+            <!-- 题目9 -->
+            <div class="question" data-question="9">
+                <div class="question-number">第9题 (简答题)</div>
+                <div class="question-text">
+                    当引用的生命周期比被引用的数据更长时，会发生什么？
+                </div>
+                <input type="text" class="text-input" placeholder="请输入答案" data-answer="编译错误">
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：编译错误</strong></p>
+                    <p>Rust编译器会检测到这种情况并报告编译错误。</p>
+                    <p>这防止了悬垂引用的产生，确保引用总是指向有效的数据。</p>
+                    <p>这是Rust内存安全保证的核心机制。</p>
+                </div>
+            </div>
+
+            <!-- 题目10 -->
+            <div class="question" data-question="10">
+                <div class="question-number">第10题 (选择题)</div>
+                <div class="question-text">
+                    下面哪种情况下需要显式标注生命周期参数？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">所有函数都需要</div>
+                    <div class="option" data-answer="true">函数返回引用且编译器无法推断时</div>
+                    <div class="option" data-answer="false">创建变量时</div>
+                    <div class="option" data-answer="false">使用结构体时</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：函数返回引用且编译器无法推断时</strong></p>
+                    <p>大多数情况下，Rust编译器可以自动推断生命周期。</p>
+                    <p>只有在编译器无法确定引用关系时，才需要显式标注。</p>
+                    <p>典型场景是函数接受多个引用参数并返回引用时。</p>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button class="btn" id="submitBtn" onclick="submitQuiz()">提交答案</button>
+                <button class="btn" id="showAnswersBtn" onclick="showAllAnswers()" style="display: none;">查看所有解析</button>
+                <button class="btn" id="restartBtn" onclick="restartQuiz()" style="display: none;">重新开始</button>
+            </div>
+
+            <div class="final-results" id="finalResults">
+                <div class="result-icon" id="resultIcon">🎉</div>
+                <div class="result-text" id="resultText">恭喜完成测验！</div>
+                <div class="result-score" id="finalScore">10/10</div>
+                <div id="resultMessage">你对Rust引用与引用安全的掌握非常出色！</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userAnswers = {};
+        let totalQuestions = 10;
+        let quizSubmitted = false;
+
+        // 处理选择题选项点击
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                if (quizSubmitted) return;
+                
+                const question = this.closest('.question');
+                const questionNum = question.dataset.question;
+                
+                // 清除同一题目的其他选项
+                question.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // 选中当前选项
+                this.classList.add('selected');
+                
+                // 记录答案
+                userAnswers[questionNum] = {
+                    type: 'option',
+                    answer: this.dataset.answer === 'true',
+                    element: this
+                };
+                
+                updateProgress();
+            });
+        });
+
+        // 处理简答题输入
+        document.querySelectorAll('.text-input').forEach(input => {
+            input.addEventListener('input', function() {
+                if (quizSubmitted) return;
+                
+                const question = this.closest('.question');
+                const questionNum = question.dataset.question;
+                
+                userAnswers[questionNum] = {
+                    type: 'text',
+                    answer: this.value.trim(),
+                    element: this
+                };
+                
+                updateProgress();
+            });
+        });
+
+        function submitQuiz() {
+            if (Object.keys(userAnswers).length < totalQuestions) {
+                alert('请完成所有题目后再提交！');
+                return;
+            }
+            
+            quizSubmitted = true;
+            let correctCount = 0;
+            
+            // 检查答案并显示结果
+            for (let questionNum in userAnswers) {
+                const userAnswer = userAnswers[questionNum];
+                const question = document.querySelector(`[data-question="${questionNum}"]`);
+                const explanation = question.querySelector('.explanation');
+                
+                if (userAnswer.type === 'option') {
+                    // 处理选择题
+                    const isCorrect = userAnswer.answer;
+                    if (isCorrect) {
+                        correctCount++;
+                        userAnswer.element.classList.add('correct');
+                    } else {
+                        userAnswer.element.classList.add('incorrect');
+                        // 显示正确答案
+                        question.querySelectorAll('.option').forEach(opt => {
+                            if (opt.dataset.answer === 'true') {
+                                opt.classList.add('correct');
+                            }
+                        });
+                    }
+                } else if (userAnswer.type === 'text') {
+                    // 处理简答题（关键词匹配）
+                    const userText = userAnswer.answer.toLowerCase();
+                    
+                    let isCorrect = false;
+                    if (questionNum === '6') {
+                        // 第6题：检查是否包含&和*
+                        isCorrect = userText.includes('&') && userText.includes('*');
+                    } else if (questionNum === '9') {
+                        // 第9题：检查是否包含编译错误相关词汇
+                        isCorrect = userText.includes('编译错误') || userText.includes('编译失败') || 
+                                   userText.includes('compile error') || userText.includes('error');
+                    }
+                    
+                    if (isCorrect) {
+                        correctCount++;
+                        userAnswer.element.style.borderColor = '#27ae60';
+                        userAnswer.element.style.backgroundColor = '#d5f4e6';
+                    } else {
+                        userAnswer.element.style.borderColor = '#e74c3c';
+                        userAnswer.element.style.backgroundColor = '#fdf2f2';
+                    }
+                }
+                
+                explanation.style.display = 'block';
+            }
+            
+            // 显示最终结果
+            showFinalResults(correctCount);
+            
+            // 更新按钮状态
+            document.getElementById('submitBtn').style.display = 'none';
+            document.getElementById('showAnswersBtn').style.display = 'inline-block';
+            document.getElementById('restartBtn').style.display = 'inline-block';
+        }
+
+        function showAllAnswers() {
+            document.querySelectorAll('.explanation').forEach(explanation => {
+                explanation.style.display = 'block';
+            });
+            
+            document.getElementById('showAnswersBtn').style.display = 'none';
+        }
+
+        function restartQuiz() {
+            // 重置所有变量
+            userAnswers = {};
+            quizSubmitted = false;
+            
+            // 清除所有选择和样式
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            document.querySelectorAll('.text-input').forEach(input => {
+                input.value = '';
+                input.style.borderColor = '';
+                input.style.backgroundColor = '';
+            });
+            
+            // 隐藏所有解释
+            document.querySelectorAll('.explanation').forEach(explanation => {
+                explanation.style.display = 'none';
+            });
+            
+            // 重置结果显示
+            document.getElementById('finalResults').style.display = 'none';
+            
+            // 重置按钮状态
+            document.getElementById('submitBtn').style.display = 'inline-block';
+            document.getElementById('showAnswersBtn').style.display = 'none';
+            document.getElementById('restartBtn').style.display = 'none';
+            
+            // 更新显示
+            updateProgress();
+            
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        }
+
+        function updateProgress() {
+            const answeredCount = Object.keys(userAnswers).length;
+            const progress = (answeredCount / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function showFinalResults(correctCount) {
+            const percentage = (correctCount / totalQuestions) * 100;
+            const finalResults = document.getElementById('finalResults');
+            const resultIcon = document.getElementById('resultIcon');
+            const resultText = document.getElementById('resultText');
+            const finalScore = document.getElementById('finalScore');
+            const resultMessage = document.getElementById('resultMessage');
+            
+            finalScore.textContent = `${correctCount}/${totalQuestions} (${percentage.toFixed(1)}%)`;
+            
+            if (percentage >= 90) {
+                resultIcon.textContent = '🏆';
+                resultText.textContent = '优秀！';
+                resultMessage.textContent = '你对Rust引用与引用安全的掌握非常出色！';
+            } else if (percentage >= 70) {
+                resultIcon.textContent = '🎉';
+                resultText.textContent = '良好！';
+                resultMessage.textContent = '你对Rust引用与引用安全有很好的理解！';
+            } else if (percentage >= 50) {
+                resultIcon.textContent = '📚';
+                resultText.textContent = '继续努力！';
+                resultMessage.textContent = '建议复习Rust引用和借用的相关概念。';
+            } else {
+                resultIcon.textContent = '💪';
+                resultText.textContent = '需要加强！';
+                resultMessage.textContent = '建议深入学习Rust的所有权和借用系统。';
+            }
+            
+            finalResults.style.display = 'block';
+            finalResults.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 初始化进度条
+        updateProgress();
+    </script>
+</body>
+</html>
