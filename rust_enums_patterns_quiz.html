@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust 枚举与模式匹配快问快答</title>
+    <link rel="stylesheet" href="quiz-styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🦀 Rust 枚举与模式匹配快问快答</h1>
+            <p>测试你对 Rust 枚举类型和模式匹配的理解</p>
+        </div>
+
+        <div class="quiz-info">
+            <div class="info-item">
+                <div class="number">10</div>
+                <div class="label">题目数量</div>
+            </div>
+            <div class="info-item">
+                <div class="number">22</div>
+                <div class="label">预计时间(分钟)</div>
+            </div>
+            <div class="info-item">
+                <div class="number">⭐⭐⭐</div>
+                <div class="label">难度等级</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- 题目1 -->
+            <div class="question" data-question="1">
+                <div class="question-number">第1题 (判断题)</div>
+                <div class="question-text">
+                    在Rust中，枚举的每个变体都可以包含不同类型和数量的数据。
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="true">正确</div>
+                    <div class="option" data-answer="false">错误</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：正确</strong></p>
+                    <p>Rust的枚举非常灵活，每个变体可以包含不同类型和数量的数据。</p>
+                    <p>例如：enum Message { Quit, Move { x: i32, y: i32 }, Write(String), ChangeColor(i32, i32, i32) }</p>
+                    <p>这使得枚举比其他语言中的枚举更加强大和表达力丰富。</p>
+                </div>
+            </div>
+
+            <!-- 题目2 -->
+            <div class="question" data-question="2">
+                <div class="question-number">第2题 (选择题)</div>
+                <div class="question-text">
+                    下列哪个是Rust中Option枚举的正确定义？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">enum Option&lt;T&gt; { Some(T), None(T) }</div>
+                    <div class="option" data-answer="true">enum Option&lt;T&gt; { Some(T), None }</div>
+                    <div class="option" data-answer="false">enum Option&lt;T&gt; { Some, None }</div>
+                    <div class="option" data-answer="false">enum Option&lt;T&gt; { Some(T), Empty }</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：enum Option&lt;T&gt; { Some(T), None }</strong></p>
+                    <p>Option是Rust标准库中最重要的枚举之一，用于表示可能存在或不存在的值。</p>
+                    <p>Some(T)包含一个类型为T的值，None表示没有值。</p>
+                    <p>这个设计避免了空指针异常，是Rust内存安全的重要组成部分。</p>
+                </div>
+            </div>
+
+            <!-- 题目3 -->
+            <div class="question" data-question="3">
+                <div class="question-number">第3题 (选择题)</div>
+                <div class="question-text">
+                    在match表达式中，下划线(_)的作用是什么？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">表示变量名</div>
+                    <div class="option" data-answer="true">匹配所有其他情况</div>
+                    <div class="option" data-answer="false">表示空值</div>
+                    <div class="option" data-answer="false">表示错误</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：匹配所有其他情况</strong></p>
+                    <p>下划线(_)是一个通配符模式，用于匹配所有其他未明确处理的情况。</p>
+                    <p>它通常用作match表达式的最后一个分支，确保所有可能的值都被处理。</p>
+                    <p>这有助于满足Rust的穷尽性检查要求。</p>
+                </div>
+            </div>
+
+            <!-- 题目4 -->
+            <div class="question" data-question="4">
+                <div class="question-number">第4题 (判断题)</div>
+                <div class="question-text">
+                    Rust的match表达式必须穷尽所有可能的模式，否则编译器会报错。
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="true">正确</div>
+                    <div class="option" data-answer="false">错误</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：正确</strong></p>
+                    <p>Rust的match表达式要求穷尽性(exhaustiveness)，必须处理所有可能的情况。</p>
+                    <p>如果没有覆盖所有模式，编译器会产生错误。</p>
+                    <p>这确保了程序的安全性，防止遗漏某些情况的处理。</p>
+                </div>
+            </div>
+
+            <!-- 题目5 -->
+            <div class="question" data-question="5">
+                <div class="question-number">第5题 (选择题)</div>
+                <div class="question-text">
+                    下面哪个代码片段正确地使用了if let语法？
+                </div>
+                <div class="code-block">A: if let Some(x) = option_value { println!("{}", x); }
+B: if let Some(x) == option_value { println!("{}", x); }
+C: if Some(x) = option_value { println!("{}", x); }
+D: if let option_value = Some(x) { println!("{}", x); }</div>
+                <div class="options">
+                    <div class="option" data-answer="true">A</div>
+                    <div class="option" data-answer="false">B</div>
+                    <div class="option" data-answer="false">C</div>
+                    <div class="option" data-answer="false">D</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：A</strong></p>
+                    <p>if let是一种简化的模式匹配语法，用于只关心一种匹配情况的场景。</p>
+                    <p>语法格式是：if let 模式 = 表达式 { 代码块 }</p>
+                    <p>B使用了==比较而不是模式匹配；C缺少let关键字；D的模式和值位置颠倒了。</p>
+                </div>
+            </div>
+
+            <!-- 题目6 -->
+            <div class="question" data-question="6">
+                <div class="question-number">第6题 (简答题)</div>
+                <div class="question-text">
+                    Result枚举有哪两个变体？请写出它们的名称。
+                </div>
+                <input type="text" class="text-input" placeholder="请输入答案，用逗号分隔" data-answer="Ok,Err">
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：Ok, Err</strong></p>
+                    <p>Result&lt;T, E&gt;枚举用于表示可能成功或失败的操作结果。</p>
+                    <p>Ok(T)表示成功，包含成功的值；Err(E)表示失败，包含错误信息。</p>
+                    <p>这是Rust错误处理的核心机制，避免了异常的使用。</p>
+                </div>
+            </div>
+
+            <!-- 题目7 -->
+            <div class="question" data-question="7">
+                <div class="question-number">第7题 (选择题)</div>
+                <div class="question-text">
+                    在模式匹配中，..语法的作用是什么？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">表示重复</div>
+                    <div class="option" data-answer="true">忽略剩余部分</div>
+                    <div class="option" data-answer="false">表示范围</div>
+                    <div class="option" data-answer="false">表示可选</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：忽略剩余部分</strong></p>
+                    <p>..语法用于忽略结构体、元组或数组中的剩余字段或元素。</p>
+                    <p>例如：let (first, ..) = tuple; 只提取第一个元素，忽略其余部分。</p>
+                    <p>这在只关心部分数据时非常有用。</p>
+                </div>
+            </div>
+
+            <!-- 题目8 -->
+            <div class="question" data-question="8">
+                <div class="question-number">第8题 (判断题)</div>
+                <div class="question-text">
+                    在Rust中，可以为枚举实现方法，就像为结构体实现方法一样。
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="true">正确</div>
+                    <div class="option" data-answer="false">错误</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：正确</strong></p>
+                    <p>Rust允许为枚举实现方法，使用impl块语法。</p>
+                    <p>例如：impl Message { fn call(&self) { /* 方法实现 */ } }</p>
+                    <p>这使得枚举不仅可以存储数据，还可以定义行为。</p>
+                </div>
+            </div>
+
+            <!-- 题目9 -->
+            <div class="question" data-question="9">
+                <div class="question-number">第9题 (选择题)</div>
+                <div class="question-text">
+                    下面哪个是正确的范围模式匹配语法？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">1...5</div>
+                    <div class="option" data-answer="true">1..=5</div>
+                    <div class="option" data-answer="false">1-5</div>
+                    <div class="option" data-answer="false">1:5</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：1..=5</strong></p>
+                    <p>Rust使用..=语法表示包含范围的模式匹配，匹配从1到5（包括5）。</p>
+                    <p>..语法表示不包含结束值的范围，但在模式匹配中通常使用..=。</p>
+                    <p>...语法已被弃用，现在使用..=替代。</p>
+                </div>
+            </div>
+
+            <!-- 题目10 -->
+            <div class="question" data-question="10">
+                <div class="question-number">第10题 (简答题)</div>
+                <div class="question-text">
+                    在模式匹配中，如何绑定匹配的值到一个变量？请写出关键字。
+                </div>
+                <input type="text" class="text-input" placeholder="请输入答案" data-answer="@">
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：@</strong></p>
+                    <p>@操作符用于在模式匹配中绑定值到变量，同时进行模式测试。</p>
+                    <p>例如：match x { n @ 1..=12 => println!("月份: {}", n), _ => {} }</p>
+                    <p>这样既可以测试值是否在范围内，又可以使用绑定的变量n。</p>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button class="btn" id="submitBtn" onclick="submitQuiz()">提交答案</button>
+                <button class="btn" id="showAnswersBtn" onclick="showAllAnswers()" style="display: none;">查看所有解析</button>
+                <button class="btn" id="restartBtn" onclick="restartQuiz()" style="display: none;">重新开始</button>
+            </div>
+
+            <div class="final-results" id="finalResults">
+                <div class="result-icon" id="resultIcon">🎉</div>
+                <div class="result-text" id="resultText">恭喜完成测验！</div>
+                <div class="result-score" id="finalScore">10/10</div>
+                <div id="resultMessage">你对Rust枚举与模式匹配的掌握非常出色！</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userAnswers = {};
+        let totalQuestions = 10;
+        let quizSubmitted = false;
+
+        // 处理选择题选项点击
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                if (quizSubmitted) return;
+                
+                const question = this.closest('.question');
+                const questionNum = question.dataset.question;
+                
+                // 清除同一题目的其他选项
+                question.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // 选中当前选项
+                this.classList.add('selected');
+                
+                // 记录答案
+                userAnswers[questionNum] = {
+                    type: 'option',
+                    answer: this.dataset.answer === 'true',
+                    element: this
+                };
+                
+                updateProgress();
+            });
+        });
+
+        // 处理简答题输入
+        document.querySelectorAll('.text-input').forEach(input => {
+            input.addEventListener('input', function() {
+                if (quizSubmitted) return;
+                
+                const question = this.closest('.question');
+                const questionNum = question.dataset.question;
+                
+                userAnswers[questionNum] = {
+                    type: 'text',
+                    answer: this.value.trim(),
+                    element: this
+                };
+                
+                updateProgress();
+            });
+        });
+
+        function submitQuiz() {
+            if (Object.keys(userAnswers).length < totalQuestions) {
+                alert('请完成所有题目后再提交！');
+                return;
+            }
+            
+            quizSubmitted = true;
+            let correctCount = 0;
+            
+            // 检查答案并显示结果
+            for (let questionNum in userAnswers) {
+                const userAnswer = userAnswers[questionNum];
+                const question = document.querySelector(`[data-question="${questionNum}"]`);
+                const explanation = question.querySelector('.explanation');
+                
+                if (userAnswer.type === 'option') {
+                    // 处理选择题
+                    const isCorrect = userAnswer.answer;
+                    if (isCorrect) {
+                        correctCount++;
+                        userAnswer.element.classList.add('correct');
+                    } else {
+                        userAnswer.element.classList.add('incorrect');
+                        // 显示正确答案
+                        question.querySelectorAll('.option').forEach(opt => {
+                            if (opt.dataset.answer === 'true') {
+                                opt.classList.add('correct');
+                            }
+                        });
+                    }
+                } else if (userAnswer.type === 'text') {
+                    // 处理简答题（关键词匹配）
+                    const userText = userAnswer.answer.toLowerCase();
+                    
+                    let isCorrect = false;
+                    if (questionNum === '6') {
+                        // 第6题：检查是否包含Ok和Err
+                        isCorrect = userText.includes('ok') && userText.includes('err');
+                    } else if (questionNum === '10') {
+                        // 第10题：检查@符号
+                        isCorrect = userText.includes('@') || userText.includes('at');
+                    }
+                    
+                    if (isCorrect) {
+                        correctCount++;
+                        userAnswer.element.style.borderColor = '#27ae60';
+                        userAnswer.element.style.backgroundColor = '#d5f4e6';
+                    } else {
+                        userAnswer.element.style.borderColor = '#e74c3c';
+                        userAnswer.element.style.backgroundColor = '#fdf2f2';
+                    }
+                }
+                
+                explanation.style.display = 'block';
+            }
+            
+            // 显示最终结果
+            showFinalResults(correctCount);
+            
+            // 更新按钮状态
+            document.getElementById('submitBtn').style.display = 'none';
+            document.getElementById('showAnswersBtn').style.display = 'inline-block';
+            document.getElementById('restartBtn').style.display = 'inline-block';
+        }
+
+        function showAllAnswers() {
+            document.querySelectorAll('.explanation').forEach(explanation => {
+                explanation.style.display = 'block';
+            });
+            
+            document.getElementById('showAnswersBtn').style.display = 'none';
+        }
+
+        function restartQuiz() {
+            // 重置所有变量
+            userAnswers = {};
+            quizSubmitted = false;
+            
+            // 清除所有选择和样式
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+            
+            document.querySelectorAll('.text-input').forEach(input => {
+                input.value = '';
+                input.style.borderColor = '';
+                input.style.backgroundColor = '';
+            });
+            
+            // 隐藏所有解释
+            document.querySelectorAll('.explanation').forEach(explanation => {
+                explanation.style.display = 'none';
+            });
+            
+            // 重置结果显示
+            document.getElementById('finalResults').style.display = 'none';
+            
+            // 重置按钮状态
+            document.getElementById('submitBtn').style.display = 'inline-block';
+            document.getElementById('showAnswersBtn').style.display = 'none';
+            document.getElementById('restartBtn').style.display = 'none';
+            
+            // 更新显示
+            updateProgress();
+            
+            // 滚动到顶部
+            window.scrollTo(0, 0);
+        }
+
+        function updateProgress() {
+            const answeredCount = Object.keys(userAnswers).length;
+            const progress = (answeredCount / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function showFinalResults(correctCount) {
+            const percentage = (correctCount / totalQuestions) * 100;
+            const finalResults = document.getElementById('finalResults');
+            const resultIcon = document.getElementById('resultIcon');
+            const resultText = document.getElementById('resultText');
+            const finalScore = document.getElementById('finalScore');
+            const resultMessage = document.getElementById('resultMessage');
+            
+            finalScore.textContent = `${correctCount}/${totalQuestions} (${percentage.toFixed(1)}%)`;
+            
+            if (percentage >= 90) {
+                resultIcon.textContent = '🏆';
+                resultText.textContent = '优秀！';
+                resultMessage.textContent = '你对Rust枚举与模式匹配的掌握非常出色！';
+            } else if (percentage >= 70) {
+                resultIcon.textContent = '🎉';
+                resultText.textContent = '良好！';
+                resultMessage.textContent = '你对Rust枚举与模式匹配有很好的理解！';
+            } else if (percentage >= 50) {
+                resultIcon.textContent = '📚';
+                resultText.textContent = '继续努力！';
+                resultMessage.textContent = '建议复习Rust枚举与模式匹配的相关知识。';
+            } else {
+                resultIcon.textContent = '💪';
+                resultText.textContent = '需要加强！';
+                resultMessage.textContent = '建议深入学习Rust枚举与模式匹配的基础概念。';
+            }
+            
+            finalResults.style.display = 'block';
+            finalResults.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 初始化进度条
+        updateProgress();
+    </script>
+</body>
+</html>
