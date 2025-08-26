@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust Trait 与泛型快问快答</title>
+    <link rel="stylesheet" href="quiz-styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🦀 Rust Trait 与泛型快问快答</h1>
+            <p>测试你对 Rust Trait、泛型和生命周期的理解</p>
+        </div>
+
+        <div class="quiz-info">
+            <div class="info-item">
+                <div class="number">10</div>
+                <div class="label">题目数量</div>
+            </div>
+            <div class="info-item">
+                <div class="number">20</div>
+                <div class="label">预计时间(分钟)</div>
+            </div>
+            <div class="info-item">
+                <div class="number">⭐⭐⭐⭐</div>
+                <div class="label">难度等级</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- 题目1 -->
+            <div class="question" data-question="1">
+                <div class="question-number">第1题 (判断题)</div>
+                <div class="question-text">
+                    在Rust中，一个类型可以实现多个Trait。
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="true">正确</div>
+                    <div class="option" data-answer="false">错误</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：正确</strong></p>
+                    <p>Rust允许一个类型实现任意数量的Trait。这是Rust实现组合和行为复用的主要方式之一。</p>
+                    <p>例如，一个类型可以同时实现 `Debug`、`Clone` 和自定义的 `Summary` Trait。</p>
+                </div>
+            </div>
+
+            <!-- 题目2 -->
+            <div class="question" data-question="2">
+                <div class="question-number">第2题 (选择题)</div>
+                <div class="question-text">
+                    下面哪个关键字用于在函数参数中指定一个泛型类型必须实现某个Trait？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">impl</div>
+                    <div class="option" data-answer="false">where</div>
+                    <div class="option" data-answer="false">trait</div>
+                    <div class="option" data-answer="true">以上都对</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：以上都对</strong></p>
+                    <p>在Rust中，有多种方式来约束泛型参数：</p>
+                    <p>1. `impl Trait` 语法: `fn notify(item: &impl Summary)`</p>
+                    <p>2. `where` 子句: `fn notify<T>(item: &T) where T: Summary`</p>
+                    <p>3. Trait Bound 语法: `fn notify<T: Summary>(item: &T)`</p>
+                    <p>`where`子句在有多个泛型参数和复杂约束时特别有用，可以使函数签名更清晰。</p>
+                </div>
+            </div>
+
+            <!-- 题目3 -->
+            <div class="question" data-question="3">
+                <div class="question-number">第3题 (选择题)</div>
+                <div class="question-text">
+                    对于 `fn longest<'a>(x: &'a str, y: &'a str) -> &'a str`，生命周期参数 `'a` 的作用是什么？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">确保x和y字符串的长度相同</div>
+                    <div class="option" data-answer="true">确保返回的引用不会比x和y中生命周期更短的那个引用活得更长</div>
+                    <div class="option" data-answer="false">确保x和y都是静态生命周期</div>
+                    <div class="option" data-answer="false">这是一个编译时元数据，对运行时没有影响</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：确保返回的引用不会比x和y中生命周期更短的那个引用活得更长</strong></p>
+                    <p>生命周期参数 `'a` 是泛型生命周期参数。它告诉编译器，返回的引用（`&'a str`）的生命周期与输入参数 `x` 和 `y` 中较短的那个生命周期相关联。</p>
+                    <p>这可以防止悬垂引用，因为编译器会确保返回的引用在使用时，其所引用的数据（`x` 或 `y`）仍然是有效的。</p>
+                </div>
+            </div>
+
+            <!-- 题目4 -->
+            <div class="question" data-question="4">
+                <div class="question-number">第4题 (判断题)</div>
+                <div class="question-text">
+                    Trait中可以包含具体的方法实现，也可以只包含方法签名。
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="true">正确</div>
+                    <div class="option" data-answer="false">错误</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：正确</strong></p>
+                    <p>Rust的Trait可以定义默认方法实现。如果一个类型实现了这个Trait，它可以选择使用默认实现，或者提供自己的实现来覆盖默认实现。</p>
+                    <p>这为实现Trait的类型提供了便利，同时也保持了灵活性。</p>
+                </div>
+            </div>
+
+            <!-- 题目5 -->
+            <div class="question" data-question="5">
+                <div class="question-number">第5题 (选择题)</div>
+                <div class="question-text">
+                    下面关于泛型和 `dyn Trait` (Trait Object) 的说法，哪个是错误的？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">泛型在编译时进行静态分发，性能更高。</div>
+                    <div class="option" data-answer="false">`dyn Trait` 在运行时进行动态分发，更灵活。</div>
+                    <div class="option" data-answer="true">使用泛型会使最终的二进制文件更小，因为它只生成一份代码。</div>
+                    <div class="option" data-answer="false">`dyn Trait` 允许你在一个集合（如`Vec`）中存储不同但实现了相同Trait的类型。</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：使用泛型会使最终的二进制文件更小，因为它只生成一份代码。</strong></p>
+                    <p>这个说法是错误的。泛型通过“单态化”（Monomorphization）实现，编译器会为每个具体使用的类型生成一份独立的代码。这会导致二进制文件体积增大，但因为没有运行时查找，所以性能更高。</p>
+                    <p>相比之下，`dyn Trait` 使用虚函数表（vtable）在运行时确定调用哪个方法，代码体积更小，但有轻微的运行时开销。</p>
+                </div>
+            </div>
+
+            <!-- 题目6 -->
+            <div class="question" data-question="6">
+                <div class="question-number">第6题 (简答题)</div>
+                <div class="question-text">
+                    在Rust中，哪两个Trait通常用于实现可打印的格式化输出？请写出它们的名称。
+                </div>
+                <input type="text" class="text-input" placeholder="请输入答案，用逗号分隔" data-answer="Debug,Display">
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：Debug, Display</strong></p>
+                    <p>`Debug` Trait用于开发者调试输出，通常使用 `#[derive(Debug)]` 自动实现，格式为 `{:?}`。</p>
+                    <p>`Display` Trait用于面向用户的、更友好的格式化输出，需要手动实现，格式为 `{}`。</p>
+                </div>
+            </div>
+
+            <!-- 题目7 -->
+            <div class="question" data-question="7">
+                <div class="question-number">第7题 (选择题)</div>
+                <div class="question-text">
+                    `impl Trait` 语法可以用在哪个位置？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">仅用作函数参数类型</div>
+                    <div class="option" data-answer="false">仅用作函数返回类型</div>
+                    <div class="option" data-answer="true">既可以用作函数参数类型，也可以用作函数返回类型</div>
+                    <div class="option" data-answer="false">只能用在 `let` 绑定中</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：既可以用作函数参数类型，也可以用作函数返回类型</strong></p>
+                    <p>作为参数: `fn notify(item: impl Summary)`，这是泛型参数 `T: Summary` 的语法糖。</p>
+                    <p>作为返回类型: `fn returns_summarizable() -> impl Summary`，这允许你返回一个实现了 `Summary` Trait的具体类型，而无需在函数签名中写出具体的返回类型。</p>
+                </div>
+            </div>
+
+            <!-- 题目8 -->
+            <div class="question" data-question="8">
+                <div class="question-number">第8题 (判断题)</div>
+                <div class="question-text">
+                    如果一个函数返回一个闭包，你必须使用 `impl Fn(u32) -> u32` 或 `Box<dyn Fn(u32) -> u32>` 作为返回类型，因为闭包的类型是匿名的。
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="true">正确</div>
+                    <div class="option" data-answer="false">错误</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：正确</strong></p>
+                    <p>每个闭包都有自己独特的、匿名的类型。因此，你无法在函数签名中直接写出这个类型。必须使用 `impl Trait` 或 `dyn Trait` 来抽象地表示返回的闭包。</p>
+                    <p>`impl Fn(...)` 在编译时确定返回类型，而 `Box<dyn Fn(...)>` 在堆上分配闭包，并在运行时确定类型。</p>
+                </div>
+            </div>
+
+            <!-- 题目9 -->
+            <div class="question" data-question="9">
+                <div class="question-number">第9题 (选择题)</div>
+                <div class="question-text">
+                    下面哪个Trait Bound表示T必须实现`Clone`和`Debug`两个Trait？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="true">T: Clone + Debug</div>
+                    <div class="option" data-answer="false">T: Clone, Debug</div>
+                    <div class="option" data-answer="false">T: Clone & Debug</div>
+                    <div class="option" data-answer="false">T: Clone | Debug</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：T: Clone + Debug</strong></p>
+                    <p>在Rust中，使用 `+` 号来指定一个泛型参数必须同时实现多个Trait。</p>
+                    <p>例如 `fn process<T: Clone + Debug>(item: T)` 要求传入的 `item` 必须是既可以克隆又可以调试打印的类型。</p>
+                </div>
+            </div>
+
+            <!-- 题目10 -->
+            <div class="question" data-question="10">
+                <div class="question-number">第10题 (简答题)</div>
+                <div class="question-text">
+                    在Trait定义中，`Self` 关键字代表什么？
+                </div>
+                <input type="text" class="text-input" placeholder="请输入答案" data-answer="实现该Trait的具体类型">
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：实现该Trait的具体类型</strong></p>
+                    <p>`Self` (大写S) 是一个类型别名，它代表最终实现这个Trait的具体类型。</p>
+                    <p>例如，在 `trait Clone` 中，`fn clone(&self) -> Self;` 意味着 `clone` 方法返回一个与调用者相同类型的新实例。</p>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button class="btn" id="submitBtn" onclick="submitQuiz()">提交答案</button>
+                <button class="btn" id="showAnswersBtn" onclick="showAllAnswers()" style="display: none;">查看所有解析</button>
+                <button class="btn" id="restartBtn" onclick="restartQuiz()" style="display: none;">重新开始</button>
+            </div>
+
+            <div class="final-results" id="finalResults">
+                <div class="result-icon" id="resultIcon">🎉</div>
+                <div class="result-text" id="resultText">恭喜完成测验！</div>
+                <div class="result-score" id="finalScore">10/10</div>
+                <div id="resultMessage">你对Rust Trait与泛型的掌握非常出色！</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userAnswers = {};
+        let totalQuestions = 10;
+        let quizSubmitted = false;
+
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                if (quizSubmitted) return;
+
+                const question = this.closest('.question');
+                const questionNum = question.dataset.question;
+
+                question.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+
+                this.classList.add('selected');
+
+                userAnswers[questionNum] = {
+                    type: 'option',
+                    answer: this.dataset.answer === 'true',
+                    element: this
+                };
+
+                updateProgress();
+            });
+        });
+
+        document.querySelectorAll('.text-input').forEach(input => {
+            input.addEventListener('input', function() {
+                if (quizSubmitted) return;
+
+                const question = this.closest('.question');
+                const questionNum = question.dataset.question;
+
+                userAnswers[questionNum] = {
+                    type: 'text',
+                    answer: this.value.trim(),
+                    element: this
+                };
+
+                updateProgress();
+            });
+        });
+
+        function submitQuiz() {
+            if (Object.keys(userAnswers).length < totalQuestions) {
+                alert('请完成所有题目后再提交！');
+                return;
+            }
+
+            quizSubmitted = true;
+            let correctCount = 0;
+
+            for (let questionNum in userAnswers) {
+                const userAnswer = userAnswers[questionNum];
+                const question = document.querySelector(`[data-question="${questionNum}"]`);
+                const explanation = question.querySelector('.explanation');
+
+                if (userAnswer.type === 'option') {
+                    const isCorrect = userAnswer.answer;
+                    if (isCorrect) {
+                        correctCount++;
+                        userAnswer.element.classList.add('correct');
+                    } else {
+                        userAnswer.element.classList.add('incorrect');
+                        question.querySelectorAll('.option').forEach(opt => {
+                            if (opt.dataset.answer === 'true') {
+                                opt.classList.add('correct');
+                            }
+                        });
+                    }
+                } else if (userAnswer.type === 'text') {
+                    const userText = userAnswer.answer.toLowerCase();
+                    let isCorrect = false;
+
+                    if (questionNum === '6') {
+                        isCorrect = userText.includes('debug') && userText.includes('display');
+                    } else if (questionNum === '10') {
+                        isCorrect = userText.includes('实现该trait的具体类型') || userText.includes('实现trait的类型');
+                    }
+
+                    if (isCorrect) {
+                        correctCount++;
+                        userAnswer.element.style.borderColor = '#27ae60';
+                        userAnswer.element.style.backgroundColor = '#d5f4e6';
+                    } else {
+                        userAnswer.element.style.borderColor = '#e74c3c';
+                        userAnswer.element.style.backgroundColor = '#fdf2f2';
+                    }
+                }
+
+                explanation.style.display = 'block';
+            }
+
+            showFinalResults(correctCount);
+
+            document.getElementById('submitBtn').style.display = 'none';
+            document.getElementById('showAnswersBtn').style.display = 'inline-block';
+            document.getElementById('restartBtn').style.display = 'inline-block';
+        }
+
+        function showAllAnswers() {
+            document.querySelectorAll('.explanation').forEach(explanation => {
+                explanation.style.display = 'block';
+            });
+            document.getElementById('showAnswersBtn').style.display = 'none';
+        }
+
+        function restartQuiz() {
+            userAnswers = {};
+            quizSubmitted = false;
+
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+            });
+
+            document.querySelectorAll('.text-input').forEach(input => {
+                input.value = '';
+                input.style.borderColor = '';
+                input.style.backgroundColor = '';
+            });
+
+            document.querySelectorAll('.explanation').forEach(explanation => {
+                explanation.style.display = 'none';
+            });
+
+            document.getElementById('finalResults').style.display = 'none';
+
+            document.getElementById('submitBtn').style.display = 'inline-block';
+            document.getElementById('showAnswersBtn').style.display = 'none';
+            document.getElementById('restartBtn').style.display = 'none';
+
+            updateProgress();
+
+            window.scrollTo(0, 0);
+        }
+
+        function updateProgress() {
+            const answeredCount = Object.keys(userAnswers).length;
+            const progress = (answeredCount / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function showFinalResults(correctCount) {
+            const percentage = (correctCount / totalQuestions) * 100;
+            const finalResults = document.getElementById('finalResults');
+            const resultIcon = document.getElementById('resultIcon');
+            const resultText = document.getElementById('resultText');
+            const finalScore = document.getElementById('finalScore');
+            const resultMessage = document.getElementById('resultMessage');
+
+            finalScore.textContent = `${correctCount}/${totalQuestions} (${percentage.toFixed(1)}%)`;
+
+            if (percentage >= 90) {
+                resultIcon.textContent = '🏆';
+                resultText.textContent = '优秀！';
+                resultMessage.textContent = '你对Rust Trait与泛型的掌握非常出色！';
+            } else if (percentage >= 70) {
+                resultIcon.textContent = '🎉';
+                resultText.textContent = '良好！';
+                resultMessage.textContent = '你对Rust Trait与泛型有很好的理解！';
+            } else if (percentage >= 60) {
+                resultIcon.textContent = '👍';
+                resultText.textContent = '及格！';
+                resultMessage.textContent = '继续学习，你会掌握得更好！';
+            } else {
+                resultIcon.textContent = '📚';
+                resultText.textContent = '需要加强';
+                resultMessage.textContent = '建议复习Rust Trait与泛型的相关知识。';
+            }
+
+            finalResults.classList.add('show');
+        }
+
+        updateProgress();
+    </script>
+</body>
+</html>
