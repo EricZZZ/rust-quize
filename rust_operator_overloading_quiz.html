@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rust 运算符重载快问快答</title>
+    <link rel="stylesheet" href="quiz-styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🦀 Rust 运算符重载快问快答</h1>
+            <p>测试你对 Rust 运算符重载、Trait 和相关概念的理解</p>
+        </div>
+
+        <div class="quiz-info">
+            <div class="info-item">
+                <div class="number">10</div>
+                <div class="label">题目数量</div>
+            </div>
+            <div class="info-item">
+                <div class="number">18</div>
+                <div class="label">预计时间(分钟)</div>
+            </div>
+            <div class="info-item">
+                <div class="number">⭐⭐⭐⭐</div>
+                <div class="label">难度等级</div>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <!-- 题目1 -->
+            <div class="question" data-question="1">
+                <div class="question-number">第1题 (判断题)</div>
+                <div class="question-text">
+                    在Rust中，你可以为任何自定义类型重载几乎所有的运算符。
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="true">正确</div>
+                    <div class="option" data-answer="false">错误</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：正确</strong></p>
+                    <p>Rust 允许你通过实现 `std::ops` 中的特定 trait 来为自定义类型重载大部分运算符。例如，通过实现 `Add` trait 可以重载 `+` 运算符。但是，有一些运算符如赋值运算符 (`=`)、逻辑运算符 (`&&`, `||`) 和成员访问运算符 (`.`) 是不能被重载的。</p>
+                </div>
+            </div>
+
+            <!-- 题目2 -->
+            <div class="question" data-question="2">
+                <div class="question-number">第2题 (选择题)</div>
+                <div class="question-text">
+                    要重载加法运算符 `+`，你需要实现哪个 trait？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="true">std::ops::Add</div>
+                    <div class="option" data-answer="false">std::ops::Plus</div>
+                    <div class="option" data-answer="false">std::ops::Sum</div>
+                    <div class="option" data-answer="false">std::ops::Addition</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：std::ops::Add</strong></p>
+                    <p>在 Rust 中，`+` 运算符是通过实现 `std::ops::Add` trait 来重载的。这个 trait 要求你定义一个 `add` 方法，该方法接收 `self` 和另一个操作数，并返回它们的和。</p>
+                </div>
+            </div>
+
+            <!-- 题目3 -->
+            <div class="question" data-question="3">
+                <div class="question-number">第3题 (选择题)</div>
+                <div class="question-text">
+                    为 `Point` 结构体实现乘法 `*` 运算符时，`mul` 方法的正确签名应该是什么？
+                </div>
+                <div class="code-block">struct Point { x: i32, y: i32 }</div>
+                <div class="options">
+                    <div class="option" data-answer="false">fn mul(self, rhs: Point) -> Point</div>
+                    <div class="option" data-answer="true">fn mul(self, rhs: Self) -> Self::Output</div>
+                    <div class="option" data-answer="false">fn mul(&self, rhs: &Point) -> Point</div>
+                    <div class="option" data-answer="false">fn mul(self, rhs: i32) -> Point</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：fn mul(self, rhs: Self) -> Self::Output</strong></p>
+                    <p>当你实现 `std::ops::Mul` trait 时，你需要定义一个 `mul` 方法。这个方法的签名通常是 `fn mul(self, rhs: Rhs) -> Self::Output`。在 `Mul` trait 中，`Rhs` 是一个关联类型，默认为 `Self`。`Output` 也是一个关联类型，表示乘法操作的结果类型。</p>
+                </div>
+            </div>
+
+            <!-- 题目4 -->
+            <div class="question" data-question="4">
+                <div class="question-number">第4题 (判断题)</div>
+                <div class="question-text">
+                    实现 `PartialEq` trait 就足以让你的类型用于 `HashMap` 的键。
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">正确</div>
+                    <div class="option" data-answer="true">错误</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：错误</strong></p>
+                    <p>要让一个类型用作 `HashMap` 的键，它必须是可哈希的并且能够进行相等性比较。因此，除了 `PartialEq` 之外，你还需要实现 `Eq` 和 `Hash` trait。`Eq` 表示全等关系（reflexive, symmetric, transitive），而 `Hash` 提供了计算哈希值的能力。</p>
+                </div>
+            </div>
+
+            <!-- 题目5 -->
+            <div class="question" data-question="5">
+                <div class="question-number">第5题 (简答题)</div>
+                <div class="question-text">
+                    如果你想通过 `println!("{}", my_type);` 来打印你的自定义类型，你需要实现哪个 trait？
+                </div>
+                <input type="text" class="text-input" placeholder="请输入答案" data-answer="Display">
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：Display</strong></p>
+                    <p>要让一个类型能够被 `println!` 宏以 `{}` 格式化打印，你需要为它实现 `std::fmt::Display` trait。这个 trait 要求你实现一个 `fmt` 方法，它定义了如何将你的类型格式化为字符串。</p>
+                </div>
+            </div>
+
+            <!-- 题目6 -->
+            <div class="question" data-question="6">
+                <div class="question-number">第6题 (选择题)</div>
+                <div class="question-text">
+                    以下哪个运算符在 Rust 中是不能被重载的？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">`[]` (索引)</div>
+                    <div class="option" data-answer="true">`&&` (逻辑与)</div>
+                    <div class="option" data-answer="false">`-` (负号)</div>
+                    <div class="option" data-answer="false">`*` (解引用)</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：`&&` (逻辑与)</strong></p>
+                    <p>Rust 不允许重载逻辑运算符 `&&` 和 `||`，因为它们的短路求值行为无法通过 trait 来保证。其他几个运算符都可以通过实现相应的 trait 来重载：`[]` (Index/IndexMut), `-` (Neg), `*` (Deref)。</p>
+                </div>
+            </div>
+
+            <!-- 题目7 -->
+            <div class="question" data-question="7">
+                <div class="question-number">第7题 (判断题)</div>
+                <div class="question-text">
+                    当你为一个类型实现了 `Add` trait 后，`+=` 运算符（通过 `AddAssign` trait）也会自动为你实现。
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">正确</div>
+                    <div class="option" data-answer="true">错误</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：错误</strong></p>
+                    <p>实现 `Add` 不会自动实现 `AddAssign`。它们是两个独立的 trait。`Add` 用于 `a + b`，而 `AddAssign` 用于 `a += b`。通常，如果你实现了 `Add`，你也应该考虑实现 `AddAssign` 以提供更完整的 API 和可能的性能优化。</p>
+                </div>
+            </div>
+
+            <!-- 题目8 -->
+            <div class="question" data-question="8">
+                <div class="question-number">第8题 (选择题)</div>
+                <div class="question-text">
+                    在 `trait Add<Rhs = Self>` 中，`Rhs` 的作用是什么？
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="true">定义加法操作的右操作数类型</div>
+                    <div class="option" data-answer="false">定义加法操作的结果类型</div>
+                    <div class="option" data-answer="false">定义左操作数的类型</div>
+                    <div class="option" data-answer="false">这是一个生命周期参数</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：定义加法操作的右操作数类型</strong></p>
+                    <p>`Rhs` (Right-Hand Side) 是 `Add` trait 中的一个泛型参数，它允许你定义右操作数的类型。例如，你可以为一个 `Point` 类型实现 `Add<i32>`，从而允许 `point + 10` 这样的操作。默认情况下，`Rhs` 是 `Self`，表示两个相同类型的实例相加。</p>
+                </div>
+            </div>
+
+            <!-- 题目9 -->
+            <div class="question" data-question="9">
+                <div class="question-number">第9题 (简答题)</div>
+                <div class="question-text">
+                    要重载一元取反运算符（例如 `-v`），你需要实现哪个 trait？
+                </div>
+                <input type="text" class="text-input" placeholder="请输入答案" data-answer="Neg">
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：Neg</strong></p>
+                    <p>一元取反运算符 `-` 是通过实现 `std::ops::Neg` trait 来重载的。这个 trait 要求你定义一个 `neg` 方法，该方法接收 `self` 并返回其相反数。</p>
+                </div>
+            </div>
+
+            <!-- 题目10 -->
+            <div class="question" data-question="10">
+                <div class="question-number">第10题 (判断题)</div>
+                <div class="question-text">
+                    所有与运算符重载相关的 trait 都在 `std::ops` 模块中。
+                </div>
+                <div class="options">
+                    <div class="option" data-answer="false">正确</div>
+                    <div class="option" data-answer="true">错误</div>
+                </div>
+                <div class="explanation">
+                    <h4>答案解析：</h4>
+                    <p><strong>答案：错误</strong></p>
+                    <p>虽然绝大多数用于运算符重载的 trait（如 `Add`, `Mul`, `Neg` 等）都在 `std::ops` 中，但也有一些例外。例如，用于格式化输出的 `Display` 和 `Debug` trait 位于 `std::fmt` 模块。同样，用于相等性比较的 `PartialEq` 和 `Eq` 位于 `std::cmp` 模块。</p>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button class="btn" id="submitBtn" onclick="submitQuiz()">提交答案</button>
+                <button class="btn" id="showAnswersBtn" onclick="showAllAnswers()" style="display: none;">查看所有解析</button>
+                <button class="btn" id="restartBtn" onclick="restartQuiz()" style="display: none;">重新开始</button>
+            </div>
+
+            <div class="final-results" id="finalResults">
+                <div class="result-icon" id="resultIcon">🎉</div>
+                <div class="result-text" id="resultText">恭喜完成测验！</div>
+                <div class="result-score" id="finalScore">10/10</div>
+                <div id="resultMessage">你对Rust运算符重载的掌握非常出色！</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userAnswers = {};
+        let totalQuestions = 10;
+        let quizSubmitted = false;
+
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                if (quizSubmitted) return;
+                const question = this.closest('.question');
+                const questionNum = question.dataset.question;
+                question.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                userAnswers[questionNum] = {
+                    type: 'option',
+                    answer: this.dataset.answer === 'true',
+                    element: this
+                };
+                updateProgress();
+            });
+        });
+
+        document.querySelectorAll('.text-input').forEach(input => {
+            input.addEventListener('input', function() {
+                if (quizSubmitted) return;
+                const question = this.closest('.question');
+                const questionNum = question.dataset.question;
+                userAnswers[questionNum] = {
+                    type: 'text',
+                    answer: this.value.trim(),
+                    element: this
+                };
+                updateProgress();
+            });
+        });
+
+        function submitQuiz() {
+            if (Object.keys(userAnswers).length < totalQuestions) {
+                alert('请完成所有题目后再提交！');
+                return;
+            }
+
+            quizSubmitted = true;
+            let correctCount = 0;
+
+            for (let questionNum in userAnswers) {
+                const userAnswer = userAnswers[questionNum];
+                const question = document.querySelector(`[data-question="${questionNum}"]`);
+                const explanation = question.querySelector('.explanation');
+
+                if (userAnswer.type === 'option') {
+                    if (userAnswer.answer) {
+                        correctCount++;
+                        userAnswer.element.classList.add('correct');
+                    } else {
+                        userAnswer.element.classList.add('incorrect');
+                        question.querySelectorAll('.option').forEach(opt => {
+                            if (opt.dataset.answer === 'true') {
+                                opt.classList.add('correct');
+                            }
+                        });
+                    }
+                } else if (userAnswer.type === 'text') {
+                    const correctAnswer = userAnswer.element.dataset.answer.toLowerCase();
+                    const userText = userAnswer.answer.toLowerCase();
+                    if (userText.includes(correctAnswer)) {
+                        correctCount++;
+                        userAnswer.element.style.borderColor = '#27ae60';
+                        userAnswer.element.style.backgroundColor = '#d5f4e6';
+                    } else {
+                        userAnswer.element.style.borderColor = '#e74c3c';
+                        userAnswer.element.style.backgroundColor = '#fdf2f2';
+                    }
+                }
+
+                explanation.style.display = 'block';
+            }
+
+            showFinalResults(correctCount);
+
+            document.getElementById('submitBtn').style.display = 'none';
+            document.getElementById('showAnswersBtn').style.display = 'inline-block';
+            document.getElementById('restartBtn').style.display = 'inline-block';
+        }
+
+        function showAllAnswers() {
+            document.querySelectorAll('.explanation').forEach(explanation => {
+                explanation.style.display = 'block';
+            });
+            document.getElementById('showAnswersBtn').style.display = 'none';
+        }
+
+        function restartQuiz() {
+            userAnswers = {};
+            quizSubmitted = false;
+
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+
+            });
+
+            document.querySelectorAll('.text-input').forEach(input => {
+                input.value = '';
+                input.style.borderColor = '';
+                input.style.backgroundColor = '';
+            });
+
+            document.querySelectorAll('.explanation').forEach(explanation => {
+                explanation.style.display = 'none';
+            });
+
+            document.getElementById('finalResults').style.display = 'none';
+
+            document.getElementById('submitBtn').style.display = 'inline-block';
+            document.getElementById('showAnswersBtn').style.display = 'none';
+            document.getElementById('restartBtn').style.display = 'none';
+
+            updateProgress();
+            window.scrollTo(0, 0);
+        }
+
+        function updateProgress() {
+            const answeredCount = Object.keys(userAnswers).length;
+            const progress = (answeredCount / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function showFinalResults(correctCount) {
+            const percentage = (correctCount / totalQuestions) * 100;
+            const finalResults = document.getElementById('finalResults');
+            const resultIcon = document.getElementById('resultIcon');
+            const resultText = document.getElementById('resultText');
+            const finalScore = document.getElementById('finalScore');
+            const resultMessage = document.getElementById('resultMessage');
+
+            finalScore.textContent = `${correctCount}/${totalQuestions} (${percentage.toFixed(1)}%)`;
+
+            if (percentage >= 90) {
+                resultIcon.textContent = '🏆';
+                resultText.textContent = '优秀！';
+                resultMessage.textContent = '你对Rust运算符重载的掌握非常出色！';
+            } else if (percentage >= 70) {
+                resultIcon.textContent = '🎉';
+                resultText.textContent = '良好！';
+                resultMessage.textContent = '你对Rust运算符重载有很好的理解！';
+            } else if (percentage >= 60) {
+                resultIcon.textContent = '👍';
+                resultText.textContent = '及格！';
+                resultMessage.textContent = '继续学习，你会掌握得更好！';
+            } else {
+                resultIcon.textContent = '📚';
+                resultText.textContent = '需要加强';
+                resultMessage.textContent = '建议复习Rust运算符重载的相关知识。';
+            }
+
+            finalResults.style.display = 'block';
+        }
+
+        updateProgress();
+    </script>
+</body>
+</html>
