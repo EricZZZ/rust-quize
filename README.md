@@ -15,29 +15,21 @@
 
 ### 当前可用的测验模块：
 
-1. **基本数据类型** (`rust_data_types_quiz.html`)
-   - 整数类型（i8, i16, i32, i64, isize, u8, u16, u32, u64, usize）
-   - 浮点类型（f32, f64）
-   - 布尔类型和字符类型
-   - 类型推断和显式类型声明
+1.  **基本数据类型** (`rust_data_types_quiz.html`)
+2.  **所有权与移动** (`rust_ownership_quiz.html`)
+3.  **引用与借用** (`rust_references_quiz.html`)
+4.  **结构体** (`rust_structs_quiz.html`)
+5.  **枚举与模式匹配** (`rust_enums_patterns_quiz.html`)
+6.  **表达式与控制流** (`rust_expressions_quiz.html`)
+7.  **错误处理** (`rust_error_handling_quiz.html`)
+8.  **Crate 与模块** (`rust_crates_modules_quiz.html`)
+9.  **数组、向量和切片** (`rust_arrays_vectors_slices_quiz.html`)
+10. **字符串类型** (`rust_string_types_quiz.html`)
+11. **Trait 与泛型** (`rust_traits_generics_quiz.html`)
+12. **指针类型** (`rust_pointer_types_quiz.html`)
+13. **运算符重载** (`rust_operator_overloading_quiz.html`)
+14. **类型系统** (`rust_type_system_quiz.html`)
 
-2. **指针类型** (`rust_pointer_types_quiz.html`)
-   - 引用和借用
-   - 可变引用和不可变引用
-   - 智能指针（Box, Rc, Arc）
-   - 生命周期基础
-
-3. **字符串类型** (`rust_string_types_quiz.html`)
-   - String vs &str
-   - 字符串字面量和字符串切片
-   - 字符串操作和方法
-   - UTF-8 编码相关概念
-
-4. **数组、向量和切片** (`rust_arrays_vectors_slices_quiz.html`)
-   - 数组的定义和使用
-   - Vec<T> 动态数组
-   - 切片类型和切片操作
-   - 迭代器基础
 
 ## 🛠️ 技术栈
 
@@ -52,9 +44,19 @@ rust-quize/
 ├── index.html                           # 主页面，测验选择界面
 ├── quiz-styles.css                      # 统一的样式文件
 ├── rust_data_types_quiz.html            # 基本数据类型测验
-├── rust_pointer_types_quiz.html         # 指针类型测验
-├── rust_string_types_quiz.html          # 字符串类型测验
+├── rust_ownership_quiz.html             #的所有权测验
+├── rust_references_quiz.html            # 引用与借用测验
+├── rust_structs_quiz.html               # 结构体测验
+├── rust_enums_patterns_quiz.html        # 枚举和模式匹配测验
+├── rust_expressions_quiz.html           # 表达式测验
+├── rust_error_handling_quiz.html        # 错误处理测验
+├── rust_crates_modules_quiz.html        # Crate和模块测验
 ├── rust_arrays_vectors_slices_quiz.html # 数组、向量和切片测验
+├── rust_string_types_quiz.html          # 字符串类型测验
+├── rust_traits_generics_quiz.html       # Trait和泛型测验
+├── rust_pointer_types_quiz.html         # 指针类型测验
+├── rust_operator_overloading_quiz.html  # 运算符重载测验
+├── rust_type_system_quiz.html           # 类型系统测验
 └── README.md                            # 项目说明文档
 ```
 
